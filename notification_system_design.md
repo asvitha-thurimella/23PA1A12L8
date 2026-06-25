@@ -322,3 +322,40 @@ Tradeoff:
 ## Best Approach
 
 A combination of Redis caching, pagination, and WebSockets would improve performance and scalability.
+
+# Stage 5 - Bulk Notification Handling
+
+Suppose a placement notification needs to be sent to thousands of students.
+
+If notifications are processed one by one in sequence, it can be slow and may fail in between.
+
+Problems with the current approach:
+
+- Slow processing time
+- High load on the server
+- If one step fails, the remaining notifications may not be processed
+
+A better solution is to use a queue-based system.
+
+In this approach:
+
+1. Notification requests are added to a queue
+2. Worker processes handle them one by one
+3. Failed jobs can be retried
+
+Example flow:
+
+- Admin creates notification
+- Notification enters queue
+- Worker stores it in database
+- Worker sends push notification
+- Worker sends email if required
+
+Advantages:
+
+- Faster bulk handling
+- Better reliability
+- Easier retry mechanism
+- Reduces blocking on main server
+
+Database write should happen first so the notification is stored permanently before any delivery action happens.
