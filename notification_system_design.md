@@ -359,3 +359,17 @@ Advantages:
 - Reduces blocking on main server
 
 Database write should happen first so the notification is stored permanently before any delivery action happens.
+
+# Stage 6 - Priority Inbox Logic
+
+To support priority notifications, a weighted sorting approach is used.
+
+Priority order:
+
+- Placement → highest priority
+- Result → medium priority
+- Event → lowest priority
+
+If two notifications have the same priority, the latest notification is shown first based on timestamp.
+
+The implementation sorts notifications first by weight and then by recency, and returns the top 10 notifications for display.
