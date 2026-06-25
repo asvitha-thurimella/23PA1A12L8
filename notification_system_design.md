@@ -166,3 +166,49 @@ WHERE student_id = 1042
 AND is_read = FALSE
 ORDER BY created_at DESC
 LIMIT 20;
+
+# Stage 3 - Query Optimization
+
+Consider the following query:
+
+SELECT \*
+FROM notifications
+WHERE student_id = 1042
+AND is_read = FALSE
+ORDER BY created_at ASC;
+
+This query is logically correct because it filters notifications for a student and only returns unread ones.
+
+But if the table grows to millions of rows, performance may slow down.
+
+Reasons:
+
+- The database may scan many rows before filtering
+- Sorting by created_at takes additional time
+- Frequent notification inserts increase table size
+
+Time complexity without indexing can be high because filtering and sorting both take time.
+
+To improve this, a composite index can be created:
+
+CREATE INDEX idx_notification_lookup
+ON notifications(student_id, is_read, created_at);
+
+This helps because:
+
+- student_id filtering becomes faster
+- unread status check is quicker
+- created_at sorting is optimized
+
+Should every column be indexed?
+
+No.
+
+Indexing every column increases storage usage and slows insert/update operations. Only frequently queried columns should be indexed.
+
+Example query for placement notifications in the last 7 days:
+
+SELECT student_id
+FROM notifications
+WHERE notification_type = 'Placement'
+AND created_at >= NOW() - INTERVAL '7 days';
