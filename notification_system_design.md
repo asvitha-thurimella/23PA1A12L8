@@ -212,3 +212,113 @@ SELECT student_id
 FROM notifications
 WHERE notification_type = 'Placement'
 AND created_at >= NOW() - INTERVAL '7 days';
+
+# Stage 4 - Improving Notification Delivery
+
+In the current system, every time a student opens the app, notifications are fetched directly from the database.
+
+This works for small usage, but with many users it can create unnecessary load.
+
+Some improvements can be made:
+
+## 1. Caching
+
+Recently accessed notifications can be stored in Redis.
+
+Benefits:
+
+- Faster response time
+- Reduces repeated database queries
+
+Tradeoff:
+
+- Extra memory usage
+- Cache invalidation needs handling
+
+---
+
+## 2. Pagination
+
+Instead of loading all notifications at once, data can be loaded in small batches.
+
+Benefits:
+
+- Faster UI loading
+- Better for mobile devices
+- Lower backend load
+
+---
+
+## 3. WebSockets
+
+New notifications can be pushed instantly without refreshing.
+
+Benefits:
+
+- Real-time updates
+- Better user experience
+
+Tradeoff:
+
+- Requires persistent connection
+
+---
+
+## Best Approach
+
+A combination of Redis caching, pagination, and WebSockets would improve performance and scalability.
+
+# Stage 4 - Improving Notification Delivery
+
+In the current system, every time a student opens the app, notifications are fetched directly from the database.
+
+This works for small usage, but with many users it can create unnecessary load.
+
+Some improvements can be made:
+
+## 1. Caching
+
+Recently accessed notifications can be stored in Redis.
+
+Benefits:
+
+- Faster response time
+- Reduces repeated database queries
+
+Tradeoff:
+
+- Extra memory usage
+- Cache invalidation needs handling
+
+---
+
+## 2. Pagination
+
+Instead of loading all notifications at once, data can be loaded in small batches.
+
+Benefits:
+
+- Faster UI loading
+- Better for mobile devices
+- Lower backend load
+
+---
+
+## 3. WebSockets
+
+New notifications can be pushed instantly without refreshing.
+
+Benefits:
+
+- Real-time updates
+- Better user experience
+
+Tradeoff:
+
+- Requires persistent connection
+
+---
+
+## Best Approach
+
+A combination of Redis caching, pagination, and WebSockets would improve performance and scalability.
